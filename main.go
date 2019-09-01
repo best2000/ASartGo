@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"image"
-	_"image/jpeg"
-	_"image/png"
+	"image/jpeg"
+	"image/png"
 	"os"
 	"github.com/disintegration/imaging"
 	"strconv"
@@ -26,7 +26,7 @@ func main() {
 	defer f.Close()
 
 	//decode image
-	im, _, err := image.Decode(f)
+	im, typ, err := image.Decode(f)
 	if err != nil {
 		fmt.Println("err:", err)
 		os.Exit(2)
@@ -82,6 +82,22 @@ func main() {
 	tex.WriteString(strArt)
 
 	// ***recommend fonts: *Inversionz, all monospace 
+
+	//create/save resize to new image
+	nim, err := os.Create("re" + f.Name())
+	fmt.Println("err:", err)
+	defer nim.Close()
+	
+	switch typ {
+	case "jpeg":
+		err = jpeg.Encode(nim, reim, nil)
+		fmt.Println("err:", err)
+	case "png":
+		err = png.Encode(nim, reim)
+		fmt.Println("err:", err)
+	default:
+		fmt.Println("err: No TYPE!")
+	}
 	
 	
 }	
