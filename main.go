@@ -3,63 +3,85 @@ package main
 import (
 	"fmt"
 	"image"
-	"image/color"
-	"image/jpeg"
-	"image/png"
+	_"image/jpeg"
+	_"image/png"
 	"os"
-	"sort"
-	"bytes"
+	"github.com/disintegration/imaging"
+	"strconv"
 )
 
 
 func main() {
-	f, err := os.Open("bg.jpg")
-	fmt.Println("err:", err)
+
+	fmt.Print("Image path: ")
+    var path string
+	fmt.Scanln(&path)
+	
+	//open image
+	f, err := os.Open(path)
+	if err != nil {
+		fmt.Println("err:", err)
+		os.Exit(2)
+	}
 	defer f.Close()
 
-	im, typ, err := image.Decode(f)
-	fmt.Println("err:", err)
+	//decode image
+	im, _, err := image.Decode(f)
+	if err != nil {
+		fmt.Println("err:", err)
+		os.Exit(2)
+	}
 
+	//resize if needed
+	fmt.Print("Resize mul: ")
+    var sizemulstr string
+	fmt.Scanln(&sizemulstr) 
 	size := im.Bounds().Size()
-	rect := image.Rect(0,0,size.X,size.Y)
-	imgay := image.NewGray16(rect)
+	sizemul, err := strconv.ParseFloat(sizemulstr, 64)
+	if err != nil {
+		fmt.Println("err:", err)
+		os.Exit(2)
+	}
+	resize := []int{int(float64(size.X)*sizemul), int(float64(size.Y)*sizemul)}
+	reim := imaging.Resize(im, resize[0], resize[1], imaging.Lanczos)
+	reimSize := reim.Bounds().Size()
 
-	a := []int{13106, 26213, 39319, 52425, 65534}
-	shade := []string{"#","D","O","/","_"}
-	for y := 0; y < size.Y; y++ {
-		for x := 0; x < size.X; x++ {
-			r, g, b, _ := im.At(x,y).RGBA()
+	//setup
+	tone := []int{13106, 26213, 39319, 52425, 65534}
+	strTone := []string{"#","o","-","O"," "}
+	strArt := ""
+
+	//read RGBA value pixel by pixel => convert to gray value => add to string 
+	for y := 0; y < reimSize.Y; y++ {
+		for x := 0; x < reimSize.X; x++ {
+			r, g, b, _ := reim.At(x,y).RGBA()
 			gray := 0.299 * float64(r) +  0.587 * float64(g) + 0.114 * float64(b)
 			grayInt := int(gray)
 			
-			x := grayInt
-			i := sort.Search(len(a), func(i int) bool { return a[i] <= x })
-			//write buffer to keep text then write to text file !!!!!!!!!!!
-
-			c := color.Gray16{Y: uint16(grayInt)}
-			imgay.Set(x, y, c) 
+			if grayInt <= tone[0] {
+				strArt += strTone[0]
+			} else if grayInt > tone[0] && grayInt <= tone[1] {
+				strArt += strTone[1]
+			} else if grayInt > tone[1] && grayInt <= tone[2] {
+				strArt += strTone[2]
+			} else if grayInt > tone[2] && grayInt <= tone[3] {
+				strArt += strTone[3]
+			} else {
+				strArt += strTone[4]
+			}
 		}
+		strArt += "\n"
 	}
-	///d/sad/sadsad/sad/sad/
-	tex, err := os.Create("ASart.txt")
-	fmt.Println("err:", err)
-	tex.WriteString(buff.string())
 
-	//create/save grayscale to new image
-	nim, err := os.Create("imgay2.png")
-	fmt.Println("err:", err)
-	defer nim.Close()
-	
-	switch typ {
-	case "jpeg":
-		err = jpeg.Encode(nim, imgay, nil)
+	//create .txt file => write string to file
+	tex, err := os.Create(f.Name() + ".txt")
+	if err!= nil {
 		fmt.Println("err:", err)
-	case "png":
-		err = png.Encode(nim, imgay)
-		fmt.Println("err:", err)
-	default:
-		fmt.Println("err: No TYPE!")
+		os.Exit(2)
 	}
+	tex.WriteString(strArt)
+
+	// ***recommend fonts: *Inversionz, all monospace 
 	
 	
 }	
