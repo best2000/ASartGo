@@ -48,7 +48,7 @@ func main() {
 
 	//setup
 	tone := []int{13106, 26213, 39319, 52425, 65534}
-	strTone := []string{"#","o","-","O"," "}
+	strTone := []string{"██","▓▓","▒▒","░░","  "}
 	strArt := ""
 
 	//read RGBA value pixel by pixel => convert to gray value => add to string 
@@ -80,8 +80,31 @@ func main() {
 		os.Exit(2)
 	}
 	tex.WriteString(strArt)
+	//create .html file => write string to file
+	html, err := os.Create(f.Name() + ".html")
+	if err!= nil {
+		fmt.Println("err:", err)
+		os.Exit(2)
+	}
+	html.WriteString(`<button id="conv" style="font-size: 30px">Convert to image</button><pre id="ty" style="display: inline-block">  Powered by <a href="https://html2canvas.hertzen.com/">html2canvas</a></pre>
+	<script>
+		document.getElementById("conv").addEventListener('click', (e)=>{
+		  let temp = document.createElement('pre')
+		  temp.textContent = " Loading..."
+		  let canvas = html2canvas(document.body)
+		  canvas.then((re) => {
+			let temp = document.createElement('pre')
+			document.body.replaceWith(re)
+		  })
+		  document.getElementById("conv").replaceWith(temp)
+		  document.getElementById("disp").remove()
+		  document.getElementById("ty").remove()
+		})
+	  </script>
+	  <script type="text/javascript" src="html2canvas.js"></script>
+	  <pre id="disp" style="font-family: Courier; font-size: 10px;">`+"\n" + strArt + "\n</pre>")
 
-	// ***recommend fonts: *Inversionz, all monospace 
+	// ***recommend fonts: *Inversionz, courier
 	
 	
 }	
