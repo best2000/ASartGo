@@ -8,11 +8,19 @@ import (
 	"os"
 	"github.com/disintegration/imaging"
 	"strconv"
+	"github.com/fatih/color"
 )
 
 
 func main() {
-
+	yellsty := color.New(color.FgYellow, color.Bold)
+	yellsty.Println(` 
+	 ______   ______   ______   __   __       ______   ______  ______  
+	/\  __ \ /\  ___\ /\  ___\ /\ \ /\ \     /\  __ \ /\  == \/\__  _\ 
+	\ \  __ \\ \___  \\ \ \____\ \ \\ \ \    \ \  __ \\ \  __<\/_/\ \/ 
+	 \ \_\ \_\\/\_____\\ \_____\\ \_\\ \_\    \ \_\ \_\\ \_\ \_\ \ \_\ 
+	  \/_/\/_/ \/_____/ \/_____/ \/_/ \/_/     \/_/\/_/ \/_/ /_/  \/_/ 
+																	   `)
 	fmt.Print("Image path: ")
     var path string
 	fmt.Scanln(&path)
@@ -48,12 +56,14 @@ func main() {
 
 	//setup
 	tone := []int{13106, 26213, 39319, 52425, 65534}
-	strTone := []string{"██","▓▓","▒▒","░░","  "}
+	//strTone := []string{"██","▓▓","▒▒","░░","  "}
+	strTone := []string{"&&","$$","MM","OO","__"}
 	strArt := ""
-
+	fmt.Println("reading and converting pixel...")
 	//read RGBA value pixel by pixel => convert to gray value => add to string 
 	for y := 0; y < reimSize.Y; y++ {
 		for x := 0; x < reimSize.X; x++ {
+			fmt.Print("\ry:", y+1, "/", reimSize.Y, "  x:", x+1, "/", reimSize.X)
 			r, g, b, _ := reim.At(x,y).RGBA()
 			gray := 0.299 * float64(r) +  0.587 * float64(g) + 0.114 * float64(b)
 			grayInt := int(gray)
@@ -106,5 +116,6 @@ func main() {
 
 	// ***recommend fonts: *Inversionz, courier
 	
+	fmt.Println("\nComplete...")
 	
 }	
