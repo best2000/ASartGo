@@ -9,10 +9,40 @@ import (
 	"github.com/disintegration/imaging"
 	"strconv"
 	"github.com/fatih/color"
+	"time"
 )
 
 
 func main() {
+	/*ani := []rune("◴◷◶◵")
+	for i := 0; i < len(ani); i++ {
+		fmt.Print("\r",string(ani[i]), " ")
+		time.Sleep(100*time.Millisecond)
+	}*/
+	fmt.Println("Starting...")
+	bar := []rune("[          ]")
+	max := 100
+	tenper := max/10
+	prog := 0
+	count := 0
+	for i := 0; i <= max; i++ {
+		if count == tenper {
+			prog ++
+			count = 0
+		}
+		percent := int(float64(float64(i)/float64(max))*float64(100))
+		switch prog {
+		case 0:
+			prog = 0
+			fmt.Print("\rLOADING ",string(bar), percent, "%")
+		default:
+			bar[prog] = []rune("=")[0]
+			fmt.Print("\rLOADING ",string(bar), percent, "%")
+		}
+		count++
+		time.Sleep(75*time.Millisecond)
+	}
+
 	yellsty := color.New(color.FgYellow, color.Bold)
 	yellsty.Println(` 
 	 ______   ______   ______   __   __       ______   ______  ______  
@@ -60,6 +90,8 @@ func main() {
 	strTone := []string{"&&","$$","MM","OO","__"}
 	strArt := ""
 	fmt.Println("reading and converting pixel...")
+	//lololo
+	
 	//read RGBA value pixel by pixel => convert to gray value => add to string 
 	for y := 0; y < reimSize.Y; y++ {
 		for x := 0; x < reimSize.X; x++ {
