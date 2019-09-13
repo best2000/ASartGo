@@ -20,28 +20,29 @@ func main() {
 		time.Sleep(100*time.Millisecond)
 	}*/
 	fmt.Println("Starting...")
-	bar := []rune("[          ]")
-	max := 100
-	tenper := max/10
-	prog := 0
-	count := 0
-	for i := 0; i <= max; i++ {
-		if count == tenper {
-			prog ++
-			count = 0
+	fbar := []rune("[          ]")
+	fmax := 100
+	ftenper := fmax/10
+	fprog := 0
+	fcount := 0
+	for i := 0; i <= fmax; i++ {
+		if fcount == ftenper {
+			fprog ++
+			fcount = 0
 		}
-		percent := int(float64(float64(i)/float64(max))*float64(100))
-		switch prog {
+		percent := int(float64(float64(i)/float64(fmax))*float64(100))
+		switch fprog {
 		case 0:
-			prog = 0
-			fmt.Print("\rLOADING ",string(bar), percent, "%")
+			fprog = 0
+			fmt.Print("\rLOADING ",string(fbar), percent, "%")
 		default:
-			bar[prog] = []rune("=")[0]
-			fmt.Print("\rLOADING ",string(bar), percent, "%")
+			fbar[fprog] = []rune("=")[0]
+			fmt.Print("\rLOADING ",string(fbar), percent, "%")
 		}
-		count++
-		time.Sleep(75*time.Millisecond)
+		fcount++
+		time.Sleep(40*time.Millisecond)
 	}
+	
 
 	yellsty := color.New(color.FgYellow, color.Bold)
 	yellsty.Println(` 
@@ -90,12 +91,30 @@ func main() {
 	strTone := []string{"&&","$$","MM","OO","__"}
 	strArt := ""
 	fmt.Println("reading and converting pixel...")
+
 	//lololo
-	
+	bar := []rune("[          ]")
+	max := reimSize.Y-1
+	tenper := max/10
+	prog := 0
+	count := 0
 	//read RGBA value pixel by pixel => convert to gray value => add to string 
 	for y := 0; y < reimSize.Y; y++ {
+		if count == tenper {
+			prog ++
+			count = 0
+		}
+		percent := int(float64(float64(y)/float64(max))*float64(100))
+		switch prog {
+		case 0:
+			prog = 0
+			fmt.Print("\rLOADING ",string(bar), percent, "%")
+		default:
+			bar[prog] = []rune("=")[0]
+			fmt.Print("\rLOADING ",string(bar), percent, "%")
+		}
+		count++
 		for x := 0; x < reimSize.X; x++ {
-			fmt.Print("\ry:", y+1, "/", reimSize.Y, "  x:", x+1, "/", reimSize.X)
 			r, g, b, _ := reim.At(x,y).RGBA()
 			gray := 0.299 * float64(r) +  0.587 * float64(g) + 0.114 * float64(b)
 			grayInt := int(gray)
