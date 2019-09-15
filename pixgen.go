@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"strconv"
 	"time"
+	"encoding/json"
 
 	"github.com/disintegration/imaging"
 	"github.com/fatih/color"
@@ -41,7 +42,7 @@ func main() {
 			fmt.Print("\rLOADING ", string(fbar), percent, "%")
 		}
 		fcount++
-		time.Sleep(25 * time.Millisecond)
+		time.Sleep(10 * time.Millisecond)
 	}
 	opsys := runtime.GOOS
 	fmt.Println("\nOS:", opsys)
