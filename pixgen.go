@@ -151,7 +151,7 @@ func main() {
 	}
 	var style string
 	switch opsys {
-	case "window":
+	case "windows":
 		style = `style="font-family: Courier; font-size: 10px;"`
 	case "linux":
 		style = `style="font-family: monospace; font-size: 10px;"`
