@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/disintegration/imaging"
 	"github.com/fatih/color"
@@ -21,31 +20,6 @@ type Config struct {
 }
 
 func main() {
-	//start
-	fmt.Println("Starting...")
-	fbar := []rune("[          ]")
-	fmax := 100
-	ftenper := fmax / 10
-	fprog := 0
-	fcount := 0
-	for i := 0; i <= fmax; i++ {
-		if fcount == ftenper {
-			fprog++
-			fcount = 0
-		}
-		percent := int(float64(float64(i)/float64(fmax)) * float64(100))
-		switch fprog {
-		case 0:
-			fprog = 0
-			fmt.Print("\rLOADING ", string(fbar), percent, "%")
-		default:
-			fbar[fprog] = []rune("=")[0]
-			fmt.Print("\rLOADING ", string(fbar), percent, "%")
-		}
-		fcount++
-		time.Sleep(4 * time.Millisecond)
-	}
-
 	yellsty := color.New(color.FgYellow)
 	yellsty.Println(` 
 	 ______   ______   ______   __   __       ______   ______  ______  
