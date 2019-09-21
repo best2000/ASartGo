@@ -35,7 +35,7 @@ print(" name:",fname)
 print(" size:", str(fsize))
 max = intdivup(fsize, 1000)
 i = 0
-#send byte to server(img)
+#send byte to server(img.xxx)
 with open(fname, "rb") as f:
     print("sending bytes...")
     while True:
