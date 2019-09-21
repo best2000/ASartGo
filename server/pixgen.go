@@ -34,16 +34,18 @@ func main() {
 	
 	//pull config.json info
 	set := Config{Tone: []string{"██", "▓▓", "▒▒", "░░", "  "}, ResizeMul: 1} //default setting
-	jstr, err := ioutil.ReadFile("config.json")
+	jstr, err := ioutil.ReadFile("conin/config.json")
 	if err != nil {
 		fmt.Println("err:", err)
 		os.Exit(2)
 	} else {
 		json.Unmarshal(jstr, &set) //json string to struct
 	}
+	os.Remove("conin/config.json") //remove readed file
 	fmt.Println("Preset")
 	fmt.Println(" Tone:", set.Tone)
 	fmt.Println(" ResizeMul:", set.ResizeMul, "\n")
+	
 
 	//check file in
 	var finfo []os.FileInfo
@@ -60,7 +62,6 @@ func main() {
 		fmt.Println("err:", err)
 		os.Exit(2)
 	}
-	defer f.Close()
 
 	//decode image
 	im, _, err := image.Decode(f)
@@ -68,6 +69,10 @@ func main() {
 		fmt.Println("err:", err)
 		os.Exit(2)
 	}
+
+	f.Close()
+	os.Remove("in/"+fname) //remove readed file
+
 	//resize if needed
 	size := im.Bounds().Size()
 	sizemul := set.ResizeMul
