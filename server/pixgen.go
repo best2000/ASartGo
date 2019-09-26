@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	"strconv"
 
 	"github.com/disintegration/imaging"
 	"github.com/fatih/color"
@@ -17,7 +18,7 @@ import (
 
 type Config struct {
 	Tone []string `json:"Tone"`
-	ResizeMul float64 `json:"ResizeMul"`
+	ResizeMul string `json:"ResizeMul"`
 }
 
 func elapsed() func() {
@@ -33,7 +34,7 @@ func main() {
 	defer elapsed()()
 	
 	//pull config.json info
-	set := Config{Tone: []string{"██", "▓▓", "▒▒", "░░", "  "}, ResizeMul: 1} //default setting
+	set := Config{Tone: []string{"██", "▓▓", "▒▒", "░░", "  "}, ResizeMul: "1"} //default setting
 	jstr, err := ioutil.ReadFile("conin/config.json")
 	if err != nil {
 		fmt.Println("err:", err)
@@ -75,20 +76,13 @@ func main() {
 
 	//resize if needed
 	size := im.Bounds().Size()
-	sizemul := set.ResizeMul
-	if err != nil {
-		fmt.Println("err:", err)
-		os.Exit(2)
-	}
+	sizemul, _ := strconv.ParseFloat(set.ResizeMul, 64)
+	sizemul = sizemul/100
 	resize := []int{int(float64(size.X) * sizemul), int(float64(size.Y) * sizemul)}
 	reim := imaging.Resize(im, resize[0], resize[1], imaging.Lanczos)
 	reimSize := reim.Bounds().Size()
-	switch set.ResizeMul {
-	case 1:
-		fmt.Println("Size:", im.Bounds().Size().X, "x", im.Bounds().Size().Y)
-	default:
-		fmt.Println("Size:", im.Bounds().Size().X, "x", im.Bounds().Size().Y, "=>", reimSize.X, "x", reimSize.Y,)
-	}
+	fmt.Println("Size:", im.Bounds().Size().X, "x", im.Bounds().Size().Y, "=>", reimSize.X, "x", reimSize.Y,)
+	
 
 	//setup
 	tone := []int{13106, 26213, 39319, 52425, 65534}
@@ -128,13 +122,13 @@ func main() {
 		strArt += "\n"
 	}
 
-	//create text.html file => write string to file
+	/*//create text.html file => write string to file
 	html, err := os.Create("out/text.html")
 	if err != nil {
 		fmt.Println("err:", err)
 		os.Exit(2)
 	}
-	html.WriteString(`<pre id="disp" style="font-family: Courier; font-size: 10px;"` + ">\n" + strArt + "\n</pre>\n")
+	html.WriteString(`<pre id="disp" style="font-family: Courier; font-size: 10px;"` + ">\n" + strArt + "\n</pre>\n")*/
 
 	//create img.html file => write string to file
 	htmlimg, err := os.Create("out/"+fname+".html")
