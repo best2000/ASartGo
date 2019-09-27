@@ -24,11 +24,7 @@ while True:
 
     #file name info recv
     fname = client_sock.recv(1024).decode('utf-8') #xxx.jpg
-    fsize = client_sock.recv(1024).decode('utf-8') #xxx bytes
     client_sock.send("server: ok i got that file info")
-    print("File Info")
-    print(" name: ", fname)
-    print(" size: ", fsize)
 
     #write recv bytes of img
     print("Writing recv bytes...(img.xxx)")
