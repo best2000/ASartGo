@@ -180,7 +180,7 @@ Size = None
 Format = None
 root = tk.Tk()
 root.title('Pixgen')
-root.geometry('450x130')
+root.geometry('450x170')
 Button(root, text="Select File", width=25, command = SelectFile).grid(row=0)
 Button(root, text="Show Pic", width=25, command = ShowPic).grid(row=1)
 Button(root, text="Setting", width=25, command = Setting).grid(row=2)
@@ -194,6 +194,6 @@ Label(root, text = 'Status : ').grid(row = 3, column = 1)
 global status
 status = Label(root)
 status.grid(row = 3, column = 2, sticky = 'w')
-status['text'] = "Plz select image"
+status['text'] = "Plz select image!"
 
 root.mainloop()
