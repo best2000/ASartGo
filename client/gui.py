@@ -19,14 +19,11 @@ def SelectFile():
         picpath = filedialog.askopenfilename(title='open',filetypes = (("jpeg files","*.jpg"),("png files","*.png"),("all files","*.*")))
         Img = Image.open(picpath)
         imsize = str(Img.size[0])+" x "+str(Img.size[1])
-        Label(root, text = os.path.basename(picpath)).grid(row = 0, column = 2, sticky = 'w')
-        Label(root, text = imsize).grid(row = 1, column = 2, sticky = 'w')
-        Label(root, text = Img.format).grid(row = 2, column = 2, sticky = 'w')
+        info1['text'] = os.path.basename(picpath)
+        info2['text'] = imsize
+        info3['text'] = Img.format
     except Exception:
         pass
-    pathbyt = bytes(picpath, encoding='utf-8')
-    with open("picpath",'wb') as picpath:
-        picpath.write(pathbyt)
     status['text'] = "Ready to convert!"
     
 
@@ -101,25 +98,17 @@ def Confirm():
     Set.destroy()
 
 def Convert():
-    status['text'] = "Working plz wait..."
     def intdivup(n1, n2):
         remin = n1%n2
         if remin != 0:
             return int((n1/n2)+1)
         else:
             return n1/n2
-
+    status['text'] = "Working plz wait..."
     bd_addr = "28:3A:4D:3F:3C:5E"
     port = 5
     sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
     sock.connect((bd_addr, port))
-
-    sock.send("client: im going to send bytes")
-    print(sock.recv(1024).decode('utf-8'))
-
-    with open("picpath",'rb') as pp:
-        picpath = pp.read()
-        picpath = picpath.decode('utf-8')
         
     fname = os.path.basename(picpath)
     fsize = os.stat(picpath).st_size
@@ -195,9 +184,20 @@ Label(root, text = 'Name : ').grid(row = 0, column=1)
 Label(root, text = 'Size  : ').grid(row = 1, column = 1)
 Label(root, text = 'Format : ').grid(row = 2, column = 1)
 Label(root, text = 'Status : ').grid(row = 3, column = 1)
+
 global status
 status = Label(root)
 status.grid(row = 3, column = 2, sticky = 'w')
 status['text'] = "Plz select image!"
+
+global info1
+info1 = Label(root)
+info1.grid(row = 0, column = 2, sticky = 'w')
+global info2
+info2 = Label(root)
+info2.grid(row = 1, column = 2, sticky = 'w')
+global info3
+info3 = Label(root)
+info3.grid(row = 2, column = 2, sticky = 'w')
 
 root.mainloop()

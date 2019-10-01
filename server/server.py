@@ -16,15 +16,9 @@ while True:
     client_sock,client_info = server_sock.accept()
     print("ACCEPTED CONNECTION:",client_info)
 
-    #server check
-    if client_sock.recv(1024) == b'server0':
-        client_sock.send("server closed")
-        break
-    client_sock.send("server ready!")
-
     #file name info recv
     fname = client_sock.recv(1024).decode('utf-8') #xxx.jpg
-    client_sock.send("server: ok i got that file info")
+    client_sock.send("server: file name recvied")
 
     #write recv bytes of img
     print("Writing recv bytes...(img.xxx)")
