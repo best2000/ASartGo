@@ -109,7 +109,7 @@ def Convert():
         else:
             return n1/n2
 
-    bd_addr = "00:1A:7D:DA:71:11"
+    bd_addr = "28:3A:4D:3F:3C:5E"
     port = 5
     sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
     sock.connect((bd_addr, port))
@@ -117,8 +117,12 @@ def Convert():
     sock.send("client: im going to send bytes")
     print(sock.recv(1024).decode('utf-8'))
 
+    with open("picpath",'rb') as pp:
+        picpath = pp.read()
+        picpath = picpath.decode('utf-8')
+        
     fname = os.path.basename(picpath)
-    fsize = os.stat(fname).st_size
+    fsize = os.stat(picpath).st_size
     sock.send(fname) #send file name
     print(sock.recv(1024).decode('utf-8'))
     max = intdivup(fsize, 1000)
