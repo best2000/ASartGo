@@ -16,7 +16,8 @@ def SelectFile():
     global picpath
     global status
     try:
-        picpath = filedialog.askopenfilename(title='open',filetypes = (("jpeg files","*.jpg"),("png files","*.png"),("all files","*.*")))
+        picpath = filedialog.askopenfilename(title='open',filetypes = (("jpeg files","*.jpg"),
+        ("png files","*.png"),("all files","*.*")))
         Img = Image.open(picpath)
         imsize = str(Img.size[0])+" x "+str(Img.size[1])
         info1['text'] = os.path.basename(picpath)
@@ -39,7 +40,7 @@ def Setting():
         jbyt = cj.read()
         jstr = jbyt.decode('utf-8')
         jdic = json.loads(jstr)
-    with open("savepath",'rb') as sp:
+    with open("savepath.txt",'rb') as sp:
         spbyt = sp.read()
         spstr = spbyt.decode('utf-8')
     global a
@@ -92,12 +93,15 @@ def Confirm():
     with open("config.json",'wb') as cj:
         jbyt = bytes(jstr, encoding='utf-8')
         cj.write(jbyt)  
-    with open("savepath",'wb') as sp:
+    with open("savepath.txt",'wb') as sp:
         sp.write(bytes(spstr, encoding='utf-8'))  
 
     Set.destroy()
 
 def Convert():
+    with open("server_addr.txt",'rb') as sa:
+        sabyt = sa.read()
+        bd_addr = sabyt.decode('utf-8')
     def intdivup(n1, n2):
         remin = n1%n2
         if remin != 0:
@@ -105,7 +109,6 @@ def Convert():
         else:
             return n1/n2
     status['text'] = "Working plz wait..."
-    bd_addr = "28:3A:4D:3F:3C:5E"
     port = 5
     sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
     sock.connect((bd_addr, port))
@@ -147,7 +150,7 @@ def Convert():
     print(sock.recv(1024).decode('utf-8'))
 
     #write recv bytes
-    with open("savepath",'rb') as sp:
+    with open("savepath.txt",'rb') as sp:
         spbyt = sp.read()
         spstr = spbyt.decode('utf-8')
 

@@ -1,2 +1,2 @@
-cd out
+cd out 
 start .
