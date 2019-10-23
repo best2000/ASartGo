@@ -7,6 +7,10 @@ import os
 import json
 import subprocess
 import bluetooth
+import os.path
+
+if os.path.exists('out') == False:
+    os.mkdir("out")
 
 def SelectFile():
     global Img
