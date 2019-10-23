@@ -3,9 +3,12 @@ import subprocess
 import os
 
 #auto directory setup
-os.mkdir("conin")
-os.mkdir("in")
-os.mkdir("out")
+if os.path.exists("conin") == False:
+    os.mkdir("conin")
+if os.path.exists("in") == False:
+    os.mkdir("in")
+if os.path.exists("out") == False:
+    os.mkdir("out")
 
 #connection setup
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
