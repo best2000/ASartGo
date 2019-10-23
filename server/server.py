@@ -2,6 +2,11 @@ import bluetooth
 import subprocess
 import os
 
+#auto directory setup
+os.mkdir("conin")
+os.mkdir("in")
+os.mkdir("out")
+
 #connection setup
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 port = 5
